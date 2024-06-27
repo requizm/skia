@@ -223,7 +223,12 @@ def git_sync_deps(deps_file_path, command_line_os_requests, verbose):
         sys.stdout.write( 'Skipping "%s".\n' % directory)
       continue
     if '@' in dependencies[directory]:
-      repo, commithash = dependencies[directory].split('@', 1)
+      # get last @ in case the repo name has an @ in it
+      # repo, commithash = dependencies[directory].split('@', 1)
+      parts = dependencies[directory].rsplit('@')
+      repo = '@'.join(parts[:-1])
+      commithash = parts[-1]
+      print(repo, commithash)
     else:
       raise Exception("please specify commit")
     if not is_sha1_sum(commithash):

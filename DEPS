@@ -7,6 +7,10 @@ vars = {
   # the commit queue can handle CLs rolling different
   # dependencies without interference from each other.
   'sk_tool_revision': 'git_revision:0a929d25e606b9059bde4052385df6b87840b35e',
+
+  # ninja CIPD package version.
+  # https://chrome-infra-packages.appspot.com/p/infra/3pp/tools/ninja
+  'ninja_version': 'version:2@1.8.2.chromium.3',
 }
 
 deps = {
@@ -62,6 +66,10 @@ deps = {
       {
         'package': 'skia/tools/sk/${{platform}}',
         'version': Var('sk_tool_revision'),
+      },
+      {
+        'package': 'infra/3pp/tools/ninja/${{platform}}',
+        'version': Var('ninja_version'),
       }
     ],
     'dep_type': 'cipd',

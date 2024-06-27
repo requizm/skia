@@ -6,7 +6,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-18.04]
+        os: [windows-latest, macos-latest, ubuntu-20.04]
         mode: [Release, Debug]
         arch: [x64, x86, arm64]
         exclude:
@@ -14,7 +14,7 @@ jobs:
             arch: x86
           - os: windows-latest
             arch: arm64
-          - os: ubuntu-18.04
+          - os: ubuntu-20.04
             arch: arm64
     steps:
     - uses: actions/checkout@v2
@@ -32,7 +32,7 @@ jobs:
           sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
           sudo apt-get update -qq
           sudo apt-get install -y \
-            git g++ g++-multilib clang-10 libc++-10-dev pandoc dpkg-dev \
+            git g++ g++-multilib clang-12 pandoc dpkg-dev \
             libcurl4-openssl-dev libgif-dev libjpeg-dev \
             libz-dev libpng-dev libtinyxml-dev libpixman-1-dev \
             libx11-dev libxcursor-dev ninja-build zip unzip \
@@ -46,6 +46,8 @@ jobs:
         echo "::add-path::${PWD}/depot_tools"
     - name: Sync Deps
       run: python tools/git-sync-deps
+    - name: Fetch Ninja
+      run: python bin/fetch-ninja
     - name: Generating Ninja Files
       shell: bash
       run: |
@@ -127,7 +129,7 @@ jobs:
           third_party/externals/zlib/*.h \
           $dst
     - name: Uploading Artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: Skia-${{ runner.os }}-${{ matrix.mode }}-${{ matrix.arch }}
         path: Skia-${{ runner.os }}-${{ matrix.mode }}-${{ matrix.arch }}
